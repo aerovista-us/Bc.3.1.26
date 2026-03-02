@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ByteCast — Weekend + EOM Script</title>
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --card: #121a24;
+      --text: #e8eef6;
+      --muted: #a9b6c7;
+      --accent: #7dd3fc;
+      --accent2: #a78bfa;
+      --border: rgba(255,255,255,.08);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(125,211,252,.12), transparent 60%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(167,139,250,.10), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 22px 14px 42px;
+    }
+    .header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .title {
+      display: grid;
+      gap: 4px;
+    }
+    h1 {
+      font-size: 20px;
+      margin: 0;
+      letter-spacing: .2px;
+    }
+    .sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+    .player {
+      display: grid;
+      gap: 12px;
+    }
+    .controls {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+    button {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .05s ease, background .2s ease, border-color .2s ease;
+    }
+    button:active { transform: scale(.98); }
+    button:hover { background: rgba(255,255,255,.10); border-color: rgba(125,211,252,.35); }
+    .time {
+      font-variant-numeric: tabular-nums;
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .bar {
+      width: 100%;
+      height: 10px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+    .fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 999px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media (min-width: 860px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+    h2 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      letter-spacing: .2px;
+    }
+    ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text);
+    }
+    li { margin: 6px 0; color: var(--muted); }
+    li strong { color: var(--text); }
+    .transcript {
+      white-space: pre-wrap;
+      color: var(--muted);
+      background: rgba(0,0,0,.18);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 10px;
+      max-height: 420px;
+      overflow: auto;
+    }
+    .footer {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      opacity: .9;
+    }
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="title">
+        <h1>ByteCast — Weekend + EOM Script</h1>
+        <div class="sub">Simple player + follow-along notes</div>
+      </div>
+      <div class="sub">bytecast_weekend_script.mp3</div>
+    </div>
+
+    <div class="card player">
+      <audio id="audio" preload="metadata">
+        <source src="bytecast_weekend_script.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+
+      <div class="controls">
+        <button id="toggle" aria-label="Play">▶ Play</button>
+        <div class="bar" id="bar" aria-label="Seek bar" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+          <div class="fill" id="fill"></div>
+        </div>
+        <div class="time" id="time">0:00 / 0:00</div>
+      </div>
+
+      <div class="grid">
+        <div class="card" style="box-shadow:none;">
+          <h2>Follow-along notes</h2>
+          <ul>
+            <li><strong>Theme:</strong> AeroVista is becoming an operating system: repeatable systems over scattered projects.</li>
+<li><strong>Brand:</strong> Reject near-duplicates; enforce true novelty for sticker/logo work.</li>
+<li><strong>Biz’n’Box:</strong> Offer is evolving into a reusable launch kit (tiers, intake, assets, tooling).</li>
+<li><strong>Storefront:</strong> Square/Printful groundwork: consistent naming, margin awareness, publish-clean pipeline.</li>
+<li><strong>Platform:</strong> ACOS = cockpit (observe/guide). AVCC = execution (for now). Keep boundaries clean.</li>
+<li><strong>Ops:</strong> Finish NXCore Server #2 clone; de-conflict identity + network before running both on same LAN.</li>
+<li><strong>Friction:</strong> Art iteration loops + occasional media playback failures; solve with standard constraints + a known-good player pattern.</li>
+<li><strong>Next actions:</strong> Clone checklist → one full storefront test (sticker → publish → purchase) → ship 2–3 ACOS dashboards.</li>
+          </ul>
+        </div>
+
+        <div class="card" style="box-shadow:none;">
+          <h2>Transcript</h2>
+          <div class="transcript" id="transcript">We closed out the weekend and February with one clear theme: AeroVista is starting to feel like a real operating system, not a pile of projects.
+
+Brand-wise, we kept refusing “close enough.” The sticker/logo work didn’t move fast, but it moved right. Every time something reused the same shapes or leaned on aviation defaults, we cut it and forced true novelty. That’s not indecision— that’s establishing a visual standard so the brand doesn’t drift into generic territory.
+
+Product-wise, Biz’n’Box got sharper. The offer is no longer just “a website.” It’s a packaged launch kit with tiers, an intake process, and assets that can repeat. We moved through email, flyer iterations, sample pages, pricing JSON, and the viewer tooling. That’s a real template taking shape—something we can deploy again and again without reinventing the wheel.
+
+Storefront-wise, we continued laying the Square/Printful groundwork: picking starter items, shaping consistent naming, and keeping margins in view. Caps, hoodies, tees—less about “what looks cool” and more about “what can we publish cleanly and sell without chaos.” The pipeline thinking is maturing.
+
+Platform-wise, the ACOS and AVCC split stayed intact. ACOS is the cockpit. It observes, organizes, and directs—without becoming the thing that runs everything. AVCC remains execution for now, with the long-term path being ACOS replacing it only when it’s stable enough. That boundary is the difference between a scalable ecosystem and a fragile god-app.
+
+Ops-wise, NXCore Server #2 continued progressing toward being a clean, non-overlapping companion to Server #1. The mission is simple: finish the clone, confirm boot, then de-conflict identity and network so both can live on the same LAN without stepping on each other. No duplicated services, no surprise collisions, no mystery outages.
+
+The main friction we saw is repeat loops: design iterations that don’t enforce novelty constraints tightly enough, and media hosting that sometimes fails to play when deployed. Both are solvable with standardization: stronger generation constraints for art, and a single “known good” audio hosting/playback pattern for every drop.
+
+Next moves are straightforward. Complete the clone checklist and make Server #2 safe to run alongside Server #1. Then run one end-to-end storefront test: pick one sticker concept, lock it, export it print-ready, publish it, and run a real purchase flow. In parallel, choose two or three cockpit dashboards for ACOS and ship them as the first measurable milestone—music, files, analytics—while keeping the cockpit pure: see, guide, coordinate.
+
+This is the shift: fewer scattered sparks, more repeatable systems. We’re not just building projects anymore. We’re building the machine that builds them.</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        Tip: Put this HTML next to the MP3 in the same folder. Then open the page in a browser.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const audio = document.getElementById('audio');
+    const toggle = document.getElementById('toggle');
+    const bar = document.getElementById('bar');
+    const fill = document.getElementById('fill');
+    const time = document.getElementById('time');
+
+    function fmt(sec) {
+      if (!isFinite(sec)) return "0:00";
+      const s = Math.max(0, Math.floor(sec));
+      const m = Math.floor(s / 60);
+      const r = s % 60;
+      return `${m}:${String(r).padStart(2,'0')}`;
+    }
+
+    function setBtn() {
+      if (audio.paused) {
+        toggle.textContent = "▶ Play";
+        toggle.setAttribute("aria-label", "Play");
+      } else {
+        toggle.textContent = "⏸ Pause";
+        toggle.setAttribute("aria-label", "Pause");
+      }
+    }
+
+    toggle.addEventListener('click', async () => {
+      try {
+        if (audio.paused) await audio.play();
+        else audio.pause();
+      } catch (e) {
+        console.warn(e);
+      }
+      setBtn();
+    });
+
+    audio.addEventListener('play', setBtn);
+    audio.addEventListener('pause', setBtn);
+
+    audio.addEventListener('loadedmetadata', () => {
+      time.textContent = `${fmt(0)} / ${fmt(audio.duration)}`;
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+      fill.style.width = `${pct}%`;
+      bar.setAttribute("aria-valuenow", String(Math.round(pct)));
+      time.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`;
+    });
+
+    function seek(clientX) {
+      const rect = bar.getBoundingClientRect();
+      const x = Math.min(rect.right, Math.max(rect.left, clientX));
+      const pct = (x - rect.left) / rect.width;
+      if (audio.duration) audio.currentTime = pct * audio.duration;
+    }
+
+    bar.addEventListener('click', (e) => seek(e.clientX));
+
+    bar.addEventListener('keydown', (e) => {
+      if (!audio.duration) return;
+      const step = 5; // seconds
+      if (e.key === 'ArrowRight') { audio.currentTime = Math.min(audio.duration, audio.currentTime + step); e.preventDefault(); }
+      if (e.key === 'ArrowLeft') { audio.currentTime = Math.max(0, audio.currentTime - step); e.preventDefault(); }
+      if (e.key === 'Home') { audio.currentTime = 0; e.preventDefault(); }
+      if (e.key === 'End') { audio.currentTime = audio.duration; e.preventDefault(); }
+    });
+
+    setBtn();
+  </script>
+</body>
+</html>
